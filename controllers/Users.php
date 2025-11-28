@@ -1,6 +1,10 @@
 <?php
     require_once "models/User.php";
     class Users{
+        private const REDIRECT_DASHBOARD = 'Location: ?c=Dashboard';
+        private const REDIRECT_ROLREAD   = 'Location: ?c=Users&a=rolRead';
+        private const REDIRECT_USERREAD  = 'Location: ?c=Users&a=userRead';
+        
         private $session;
         public function __construct(){
             $this->session = $_SESSION['session'];
@@ -8,7 +12,7 @@
 
         // Controlador Principal
         public function main(){
-            header("Location: ?c=Dashboard");
+            header(self::REDIRECT_DASHBOARD);
         }
 
         // Controlador Crear Rol
@@ -21,10 +25,10 @@
                     $rol = new User;
                     $rol->setRolName($_POST['rol_name']);
                     $rol->create_rol();
-                    header("Location: ?c=Users&a=rolRead");
+                    header(self::REDIRECT_ROLREAD);
                 }
             } else {
-                header("Location: ?c=Dashboard");
+                header(self::REDIRECT_DASHBOARD);
             }
 
         }
@@ -36,7 +40,7 @@
                 $roles = $roles->read_roles();
                 require_once "views/modules/users/rol_read.view.php";
             } else {
-                header("Location: ?c=Dashboard");
+                hheader(self::REDIRECT_DASHBOARD);
             }
         }
         // Controlador Actualizar Rol
@@ -52,10 +56,10 @@
                     $rolUpdate->setRolCode($_POST['rol_code']);
                     $rolUpdate->setRolName($_POST['rol_name']);
                     $rolUpdate->update_rol();
-                    header("Location: ?c=Users&a=rolRead");
+                    header(self::REDIRECT_ROLREAD);
                 }
             } else {
-                header("Location: ?c=Dashboard");
+                header(self::REDIRECT_DASHBOARD);
             }
         }
 
@@ -64,9 +68,9 @@
             if ($this->session == 'admin') {
                 $rol = new User;
                 $rol->delete_rol($_GET['idRol']);
-                header("Location: ?c=Users&a=rolRead");
+                header(self::REDIRECT_USERREAD);
             } else {
-                header("Location: ?c=Dashboard");
+                header(self::REDIRECT_DASHBOARD);
             }
         }
         
@@ -90,10 +94,10 @@
                         $_POST['user_state']
                     );
                     $user->create_user();
-                    header("Location: ?c=Users&a=userRead");
+                    header(self::REDIRECT_USERREAD);
                 }
             } else {
-                header("Location: ?c=Dashboard");
+                header(self::REDIRECT_DASHBOARD);
             }
         }
 
@@ -105,7 +109,7 @@
                 $users = $users->read_users();
                 require_once "views/modules/users/user_read.view.php";
             } else {
-                header("Location: ?c=Dashboard");
+                header(self::REDIRECT_DASHBOARD);
             }
         }
 
@@ -135,7 +139,7 @@
                     header("Location: ?c=Users&a=userRead");
                 }
             } else {
-                header("Location: ?c=Dashboard");
+                header(self::REDIRECT_DASHBOARD);
             }
         }
 
@@ -144,9 +148,9 @@
             if ($this->session == 'admin') {
                 $user = new User;
                 $user->delete_user($_GET['idUser']);
-                header("Location: ?c=Users&a=userRead");
+                header(self::REDIRECT_USERREAD);
             } else {
-                header("Location: ?c=Dashboard");
+                header(self::REDIRECT_DASHBOARD);
             }
         }
     }

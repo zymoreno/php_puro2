@@ -1,14 +1,15 @@
 <?php
     require_once "models/User.php";
     class Login{
+        private const LOGIN_VIEW = "views/company/login.view.php";
         // Controlador Principal
         public function main(){
             if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 if (empty($_SESSION['session'])) {
                     $message = "";
-                    require_once "views/company/login.view.php";
+                    require_once self::LOGIN_VIEW; 
                 } else {
-                    header("Location:?c=Dashboard");
+                    header(self::REDIRECT_DASHBOARD);
                 }
             }
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -22,14 +23,14 @@
                     if ($active != 0) {
                         $_SESSION['session'] = $profile->getRolName();
                         $_SESSION['profile'] = serialize($profile);
-                        header("Location:?c=Dashboard");
+                        header(self::REDIRECT_DASHBOARD);
                     } else {
                         $message = "El Usuario NO está activo";
-                        require_once "views/company/login.view.php";
+                        require_once self::LOGIN_VIEW;
                     }
                 } else {
                     $message = "Credenciales incorrectas ó el Usuario NO existe";
-                    require_once "views/company/login.view.php";
+                    require_once self::LOGIN_VIEW;
                 }
             }
 
