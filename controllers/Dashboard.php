@@ -2,7 +2,9 @@
 class Dashboard{
 
     public function main(){
-        $session = $_SESSION['session'];
-        require_once "views/roles/".$session."/". $session.".view.php";
+        $session = $_SESSION['session'] ?? 'admin';
+        $viewPath = 'roles/' . $session . '/' . $session . '.view';
+
+        View::render($viewPath);
     }
 }

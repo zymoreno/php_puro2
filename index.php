@@ -1,5 +1,6 @@
 <?php
-ob_start();
+require_once __DIR__ . '/libs/View.php';
+
 session_start();
 // session_destroy();
 require_once "models/DataBase.php";
