@@ -8,7 +8,6 @@
         public function main(){
             if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 if (empty($_SESSION['session'])) {
-                    $message = "";
                     require self::LOGIN_VIEW; 
                 } else {
                     header(self::REDIRECT_DASHBOARD);
@@ -38,4 +37,3 @@
 
         }
     }
-?>

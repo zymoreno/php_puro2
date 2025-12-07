@@ -4,4 +4,3 @@
             View::render('modules/landing.view');
         }
     }
-?>
