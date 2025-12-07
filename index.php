@@ -19,7 +19,7 @@ $allowedControllers = [
 
 // Obtener controlador seguro
 $controllerName = isset($_GET['c']) ? $_GET['c'] : 'Landing';
-$controllerName = preg_replace('/[^a-zA-Z0-9_]/', '', $controllerName);
+$controllerName = preg_replace('/\W/', '', $controllerName);
 
 // Validar en whitelist
 if (!array_key_exists($controllerName, $allowedControllers)) {
@@ -34,7 +34,7 @@ $controller = new $controllerName();
 
 // Acción segura
 $action = isset($_GET['a']) ? $_GET['a'] : 'main';
-$action = preg_replace('/[^a-zA-Z0-9_]/', '', $action);
+$action = preg_replace('/\W/', '', $action);
 
 // Carga de vistas (públicas o por roles)
 if ($controllerName === 'Landing' || $controllerName === 'Login') {
@@ -68,5 +68,3 @@ if ($controllerName === 'Landing' || $controllerName === 'Login') {
     header("Location: ?");
     exit;
 }
-
-?>
