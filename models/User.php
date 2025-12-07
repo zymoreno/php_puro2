@@ -22,7 +22,7 @@ namespace App\Models;
                 if (method_exists($this, $f = '__construct' . $i)) {
                     call_user_func_array(array($this, $f), $a);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -167,7 +167,7 @@ namespace App\Models;
                 } else {
                     return false;
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -180,7 +180,7 @@ namespace App\Models;
                 $stmt->bindValue('rolCode', $this->getRolCode());
                 $stmt->bindValue('rolName', $this->getRolName());
                 $stmt->execute();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -198,7 +198,7 @@ namespace App\Models;
                     array_push($rolList, $rolObj);
                 }
                 return $rolList;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -215,7 +215,7 @@ namespace App\Models;
                 $rol->setRolCode($rolDb['rol_code']);
                 $rol->setRolName($rolDb['rol_name']);
                 return $rol;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -231,7 +231,7 @@ namespace App\Models;
                 $stmt->bindValue('rolCode', $this->getRolCode());
                 $stmt->bindValue('rolName', $this->getRolName());
                 $stmt->execute();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -243,7 +243,7 @@ namespace App\Models;
                 $stmt = $this->dbh->prepare($sql);
                 $stmt->bindValue('rolCode', $rolCode);
                 $stmt->execute();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -271,7 +271,7 @@ namespace App\Models;
                 $stmt->bindValue('userPass', sha1($this->getUserPass()));
                 $stmt->bindValue('userState', $this->getUserState());
                 $stmt->execute();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -309,7 +309,7 @@ namespace App\Models;
                     array_push($userList, $userObj);
                 }
                 return $userList;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -347,7 +347,7 @@ namespace App\Models;
                     $userDb['user_state']
                 );
                 return $user;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -375,7 +375,7 @@ namespace App\Models;
                 $stmt->bindValue('userPass', sha1($this->getUserPass()));
                 $stmt->bindValue('userState', $this->getUserState());
                 $stmt->execute();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -387,7 +387,7 @@ namespace App\Models;
                 $stmt = $this->dbh->prepare($sql);
                 $stmt->bindValue('userCode', $userCode);
                 $stmt->execute();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
