@@ -1,12 +1,14 @@
 <?php
-require_once __DIR__ . '/libs/View.php';
+
+use App\Controllers\Landing;
+use App\Controllers\Login;
+use App\Controllers\Logout;
+use App\Controllers\Dashboard;
+use App\Controllers\Users;
 
 session_start();
-// session_destroy();
-require_once "models/DataBase.php";
 
-// Lista blanca de controladores
-
+// Lista blanca de controladores y sus rutas
 $allowedControllers = [
     'Landing'   => 'controllers/Landing.php',
     'Login'     => 'controllers/Login.php',
@@ -15,34 +17,29 @@ $allowedControllers = [
     'Users'     => 'controllers/Users.php',
 ];
 
-// Obtener controlador de forma segura
-
+// Obtener controlador seguro
 $controllerName = isset($_GET['c']) ? $_GET['c'] : 'Landing';
-
-
 $controllerName = preg_replace('/[^a-zA-Z0-9_]/', '', $controllerName);
 
-
+// Validar en whitelist
 if (!array_key_exists($controllerName, $allowedControllers)) {
     $controllerName = 'Landing';
 }
 
-// Incluir el archivo del controlador de forma segura
+// Cargar controlador desde su archivo (solo una vez)
 require_once $allowedControllers[$controllerName];
 
-// Crear instancia del controlador (la clase se llama igual que la clave)
+// Crear instancia
 $controller = new $controllerName();
-$view       = $controllerName;
 
-// Obtener acción de forma segura
-
+// Acción segura
 $action = isset($_GET['a']) ? $_GET['a'] : 'main';
 $action = preg_replace('/[^a-zA-Z0-9_]/', '', $action);
 
-// Lógica de carga de vistas
+// Carga de vistas (públicas o por roles)
+if ($controllerName === 'Landing' || $controllerName === 'Login') {
 
-if ($view === 'Landing' || $view === 'Login') {
-    // Vistas públicas (sin sesión)
+    // Vistas públicas
     require_once "views/company/header.view.php";
 
     if (is_callable([$controller, $action])) {
@@ -50,12 +47,12 @@ if ($view === 'Landing' || $view === 'Login') {
     }
 
     require_once "views/company/footer.view.php";
-} elseif (!empty($_SESSION['session'])) {
-    // Vistas por rol con sesión iniciada
-    require_once "models/User.php";
 
-    $profile      = isset($_SESSION['profile']) ? @unserialize($_SESSION['profile']) : null;
-    $sessionRole  = $_SESSION['session'];
+} elseif (!empty($_SESSION['session'])) {
+
+    // Vistas por rol
+    $profile     = isset($_SESSION['profile']) ? @unserialize($_SESSION['profile']) : null;
+    $sessionRole = $_SESSION['session'];
 
     require_once "views/roles/" . $sessionRole . "/header.view.php";
 
@@ -64,11 +61,12 @@ if ($view === 'Landing' || $view === 'Login') {
     }
 
     require_once "views/roles/" . $sessionRole . "/footer.view.php";
+
 } else {
-    // Si no hay sesión ni vista pública válida, redirigir
-    header("Location:?");
+
+    // Si intenta entrar sin sesión → redirigir
+    header("Location: ?");
     exit;
 }
 
-ob_end_flush();
 ?>
