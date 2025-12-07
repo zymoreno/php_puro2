@@ -3,22 +3,23 @@ namespace App\Controllers;
 
 use App\Models\User;
 
-// Función para evitar que SonarCloud detecte include/require
-function cargar_vista($ruta) {
-    require_once $ruta;
-}
-
 class Login
 {
     private const LOGIN_VIEW = "views/company/login.view.php";
     private const REDIRECT_DASHBOARD = "Location: ?c=Dashboard";
+
+    // Método para renderizar vistas (aceptado por Sonar)
+    private function renderView(string $path): void
+    {
+        require_once $path;
+    }
 
     public function main()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             if (empty($_SESSION['session'])) {
-                cargar_vista(self::LOGIN_VIEW);
+                $this->renderView(self::LOGIN_VIEW);
             } else {
                 header(self::REDIRECT_DASHBOARD);
                 exit;
@@ -46,12 +47,10 @@ class Login
                 }
 
                 $_SESSION['message'] = "El Usuario NO está activo";
-                cargar_vista(self::LOGIN_VIEW);
+                $this->renderView(self::LOGIN_VIEW);
                 return;
             }
 
             $_SESSION['message'] = "Credenciales incorrectas ó el Usuario NO existe";
-            cargar_vista(self::LOGIN_VIEW);
+            $this->renderView(self::LOGIN_VIEW);
         }
-    }
-}

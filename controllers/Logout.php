@@ -1,9 +1,13 @@
 <?php
-    require_once "models/User.php";
-    class Logout{
-        public function main(){
-            session_destroy();
-            header("Location:?");
-        }
+
+namespace App\Controllers;
+
+class Logout
+{
+    public function main(): void
+    {
+        session_destroy();
+        header("Location: ?");
+        exit;
     }
-?>
+}
