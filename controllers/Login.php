@@ -12,7 +12,7 @@ class Login
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if (empty($_SESSION['session'])) {
-                include self::LOGIN_VIEW;
+                include_once self::LOGIN_VIEW; // ← CORRECTO
             } else {
                 header(self::REDIRECT_DASHBOARD);
                 exit;
@@ -33,17 +33,18 @@ class Login
                 if ($active != 0) {
                     $_SESSION['session'] = $profile->getRolName();
                     $_SESSION['profile'] = serialize($profile);
+
                     header(self::REDIRECT_DASHBOARD);
                     exit;
                 }
 
                 $_SESSION['message'] = "El Usuario NO está activo";
-                include self::LOGIN_VIEW;
+                include_once self::LOGIN_VIEW;
                 return;
             }
 
             $_SESSION['message'] = "Credenciales incorrectas ó el Usuario NO existe";
-            include self::LOGIN_VIEW;
+            include_once self::LOGIN_VIEW;
         }
     }
 }
