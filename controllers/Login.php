@@ -3,6 +3,8 @@ namespace App\Controllers;
 
 use App\Models\User;
 
+define('BASE_PATH', dirname(__DIR__, 1)); 
+
 class Login
 {
     private const LOGIN_VIEW = "views/company/login.view.php";
@@ -12,7 +14,7 @@ class Login
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if (empty($_SESSION['session'])) {
-                include_once self::LOGIN_VIEW; // ← CORRECTO
+                require_once BASE_PATH . '/' . self::LOGIN_VIEW;
             } else {
                 header(self::REDIRECT_DASHBOARD);
                 exit;
@@ -39,12 +41,12 @@ class Login
                 }
 
                 $_SESSION['message'] = "El Usuario NO está activo";
-                include_once self::LOGIN_VIEW;
+                require_once BASE_PATH . '/' . self::LOGIN_VIEW;
                 return;
             }
 
             $_SESSION['message'] = "Credenciales incorrectas ó el Usuario NO existe";
-            include_once self::LOGIN_VIEW;
+            require_once BASE_PATH . '/' . self::LOGIN_VIEW;
         }
     }
 }
