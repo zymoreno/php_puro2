@@ -12,7 +12,7 @@ class Login
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if (empty($_SESSION['session'])) {
-                require self::LOGIN_VIEW;
+                include self::LOGIN_VIEW;
             } else {
                 header(self::REDIRECT_DASHBOARD);
                 exit;
@@ -38,12 +38,12 @@ class Login
                 }
 
                 $_SESSION['message'] = "El Usuario NO está activo";
-                require self::LOGIN_VIEW;
+                include self::LOGIN_VIEW;
                 return;
             }
 
             $_SESSION['message'] = "Credenciales incorrectas ó el Usuario NO existe";
-            require self::LOGIN_VIEW;
+            include self::LOGIN_VIEW;
         }
     }
 }
