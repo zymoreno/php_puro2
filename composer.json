@@ -1,0 +1,11 @@
+{
+    "name": "zymoreno/php_puro2",
+    "description": "Proyecto PHP MVC para la tienda",
+    "autoload": {
+        "psr-4": {
+            "App\\Controllers\\": "controllers/",
+            "App\\Models\\": "models/"
+        }
+    },
+    "require": {}
+}

@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
     class DataBase{
         #  Conexión Local
         // public static function connection(){

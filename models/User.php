@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
     class User{
         // 1ra Parte: Atributos
         private $dbh;

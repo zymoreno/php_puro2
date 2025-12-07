@@ -1,5 +1,7 @@
 <?php
-    require_once "models/User.php";
+    namespace App\Controllers;
+
+    use App\Models\User;
     class Login{
         private const LOGIN_VIEW = "views/company/login.view.php";
         // Controlador Principal
@@ -7,7 +9,7 @@
             if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 if (empty($_SESSION['session'])) {
                     $message = "";
-                    require_once self::LOGIN_VIEW; 
+                    require self::LOGIN_VIEW; 
                 } else {
                     header(self::REDIRECT_DASHBOARD);
                 }
@@ -26,11 +28,11 @@
                         header(self::REDIRECT_DASHBOARD);
                     } else {
                         $message = "El Usuario NO está activo";
-                        require_once self::LOGIN_VIEW;
+                        require self::LOGIN_VIEW;
                     }
                 } else {
                     $message = "Credenciales incorrectas ó el Usuario NO existe";
-                    require_once self::LOGIN_VIEW;
+                    require self::LOGIN_VIEW;
                 }
             }
 
