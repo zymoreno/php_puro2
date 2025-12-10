@@ -1,35 +1,43 @@
 <?php
 namespace App\Models;
-    class DataBase{
-        #  Conexión Local
-        // public static function connection(){
-        //     $hostname = "localhost";
-        //     $port = "3306";
-        //     $database = "database_php";
-        //     $username = "root";
-        //     $password = "";
-        //     $pdo = new PDO("mysql:host=$hostname;port=$port;dbname=$database;charset=utf8",$username,$password);
-        //     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        //     return $pdo;
-        //
-        // }
-        
-        ## Conexión Azure
-        public static function connection(){
-            $hostname = "serverdatabase2.mysql.database.azure.com";
-            $port = "3306";
-            $database = "DB_PASSWORD";
-            
-            $password = getenv('DB_PASSWORD');
-            $options = array(
-                PDO::MYSQL_ATTR_SSL_CA => 'assets/database/DigiCertGlobalRootG2.crt.pem'
-            );
 
-            $pdo = new PDO("mysql:host=$hostname;port=$port;dbname=$database;charset=utf8",$username,$password,$options);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $pdo;
-        }
+use PDO;
 
-        ## https://php-limpio-fpeccygaf2czhjbg.canadacentral-01.azurewebsites.net/
+class DataBase{
+
+    public static function connection(){
+
+        // Host del servidor MySQL de Azure
+        $hostname = "serverdatabase2.mysql.database.azure.com";
+        $port     = "3306";
+
+        // Nombre exacto de tu base
+        $database = "database_php";
+
+        // Usuario administrador con el sufijo del servidor
+        $username = "Adminda2@serverdatabase2";
+
+        // Contraseña que configuraste o restablezcas en Azure
+        $password = "AQUI_TU_CONTRASENA";
+
+        // Certificado SSL obligatorio en Azure
+        $options = [
+            PDO::MYSQL_ATTR_SSL_CA => 'assets/database/DigiCertGlobalRootG2.crt.pem',
+            PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
+        ];
+
+        // Crear conexión
+        $pdo = new PDO(
+            "mysql:host=$hostname;port=$port;dbname=$database;charset=utf8",
+            $username,
+            $password,
+            $options
+        );
+
+        // Manejo de errores
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        return $pdo;
     }
+}
 ?>
