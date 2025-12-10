@@ -18,7 +18,7 @@ class DataBase{
         $username = "Adminda2@serverdatabase2";
 
         // Contraseña que configuraste o restablezcas en Azure
-        $password = "AQUI_TU_CONTRASENA";
+        $password = "A4min123.";
 
         // Certificado SSL obligatorio en Azure
         $options = [
