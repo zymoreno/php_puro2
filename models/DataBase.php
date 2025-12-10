@@ -19,7 +19,7 @@ namespace App\Models;
             $hostname = "serverdatabase2.mysql.database.azure.com";
             $port = "3306";
             $database = "DB_PASSWORD";
-            $username = "A4min123.";
+            
             $password = getenv('DB_PASSWORD');
             $options = array(
                 PDO::MYSQL_ATTR_SSL_CA => 'assets/database/DigiCertGlobalRootG2.crt.pem'
