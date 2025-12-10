@@ -1,46 +1,37 @@
 <?php
-declare(strict_types=1);
-
 session_start();
 
-require_once __DIR__ . '/vendor/autoload.php';
-
-use App\Controllers\Landing;
-use App\Controllers\Login;
-use App\Controllers\Logout;
-use App\Controllers\Dashboard;
-use App\Controllers\Users;
-
-// Lista blanca de controladores (NOMBRE => CLASE COMPLETA)
+// Lista blanca de controladores y sus rutas
 $allowedControllers = [
-    'Landing'   => Landing::class,
-    'Login'     => Login::class,
-    'Logout'    => Logout::class,
-    'Dashboard' => Dashboard::class,
-    'Users'     => Users::class,
+    'Landing'   => 'controllers/Landing.php',
+    'Login'     => 'controllers/Login.php',
+    'Logout'    => 'controllers/Logout.php',
+    'Dashboard' => 'controllers/Dashboard.php',
+    'Users'     => 'controllers/Users.php',
 ];
 
-// Obtener controlador seguro
-$controllerKey = $_GET['c'] ?? 'Landing';
-$controllerKey = preg_replace('/\W/', '', $controllerKey);
+// Obtener controlador (por defecto Landing)
+$controllerName = isset($_GET['c']) ? $_GET['c'] : 'Landing';
+$controllerName = preg_replace('/\W/', '', $controllerName);
 
-// Si no existe en la whitelist, usar Landing
-if (!array_key_exists($controllerKey, $allowedControllers)) {
-    $controllerKey = 'Landing';
+// Validar en la whitelist
+if (!array_key_exists($controllerName, $allowedControllers)) {
+    $controllerName = 'Landing';
 }
 
-// Nombre de la clase con namespace
-$controllerClass = $allowedControllers[$controllerKey];
+// Cargar el archivo del controlador
+require_once $allowedControllers[$controllerName];
 
-// Crear instancia del controlador correcto
-$controller = new $controllerClass();
+// IMPORTANTE: construir el nombre de la clase con namespace
+$controllerClass = "App\\Controllers\\{$controllerName}";
+$controller      = new $controllerClass();
 
-// Acción segura
-$action = $_GET['a'] ?? 'main';
+// Acción segura (por defecto main)
+$action = isset($_GET['a']) ? $_GET['a'] : 'main';
 $action = preg_replace('/\W/', '', $action);
 
-// Vistas públicas (Landing y Login)
-if ($controllerKey === 'Landing' || $controllerKey === 'Login') {
+// VISTAS PÚBLICAS (Landing y Login)
+if ($controllerName === 'Landing' || $controllerName === 'Login') {
 
     require_once "views/company/header.view.php";
 
@@ -52,7 +43,7 @@ if ($controllerKey === 'Landing' || $controllerKey === 'Login') {
 
 } elseif (!empty($_SESSION['session'])) {
 
-    // Vistas por rol
+    // VISTAS POR ROL (cuando ya hay sesión)
     $profile     = isset($_SESSION['profile']) ? @unserialize($_SESSION['profile']) : null;
     $sessionRole = $_SESSION['session'];
 
@@ -65,8 +56,7 @@ if ($controllerKey === 'Landing' || $controllerKey === 'Login') {
     require_once "views/roles/" . $sessionRole . "/footer.view.php";
 
 } else {
-
-    // Si intenta entrar sin sesión → redirigir a Landing
+    // Si intenta entrar a algo privado sin sesión → volver a inicio
     header("Location: ?");
     exit;
 }
