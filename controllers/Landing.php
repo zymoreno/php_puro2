@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Libs\View; 
+use App\Libs\View;
 
 class Landing
 {

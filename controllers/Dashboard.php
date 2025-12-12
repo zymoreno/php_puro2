@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Libs\View; 
+use App\Libs\View;
 
 class Dashboard
 {
@@ -11,7 +11,7 @@ class Dashboard
     {
         $session = $_SESSION['session'] ?? 'admin';
 
-        
+
         $viewPath = "roles/{$session}/{$session}.view";
 
         View::render($viewPath);
