@@ -55,13 +55,13 @@ if ($controllerName === 'Landing' || $controllerName === 'Login') {
 
     $sessionRole = (string)$_SESSION['session'];
 
-    require __DIR__ . "/views/roles/{$sessionRole}/header.view.php";
+    require_once __DIR__ . "/views/roles/{$sessionRole}/header.view.php";
 
     if (is_callable([$controller, $action])) {
         $controller->{$action}();
     }
 
-    require __DIR__ . "/views/roles/{$sessionRole}/footer.view.php";
+    require_once __DIR__ . "/views/roles/{$sessionRole}/footer.view.php";
 
 } else {
     header("Location: ?");
