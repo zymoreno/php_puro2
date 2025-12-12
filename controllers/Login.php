@@ -10,10 +10,14 @@ class Login
     private const LOGIN_VIEW = __DIR__ . '/../views/company/login.view.php';
     private const REDIRECT_DASHBOARD = 'Location: ?c=Dashboard';
 
-    // Render seguro de vistas (para archivos .view.php)
+    /**
+     * Renderiza una vista.
+     * Las vistas no se cargan por autoload (PSR-4 no aplica).
+     */
     private function renderView(string $absolutePath): void
     {
-        require $absolutePath;
+        // NOSONAR - Inclusión intencional de vistas
+        require_once $absolutePath;
     }
 
     public function main(): void
@@ -57,7 +61,7 @@ class Login
             return;
         }
 
-        // Método HTTP no soportado
+        // Método HTTP no permitido
         http_response_code(405);
     }
 }
