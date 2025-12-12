@@ -1,62 +1,66 @@
 <?php
+declare(strict_types=1);
+
 session_start();
 
-// Lista blanca de controladores y sus rutas
+require_once __DIR__ . '/vendor/autoload.php';  // ÚNICO require_once para clases
+
+use App\Controllers\Landing;
+use App\Controllers\Login;
+use App\Controllers\Logout;
+use App\Controllers\Dashboard;
+use App\Controllers\Users;
+
+// 1) Lista blanca: controlador => clase (NO archivos)
 $allowedControllers = [
-    'Landing'   => 'controllers/Landing.php',
-    'Login'     => 'controllers/Login.php',
-    'Logout'    => 'controllers/Logout.php',
-    'Dashboard' => 'controllers/Dashboard.php',
-    'Users'     => 'controllers/Users.php',
+    'Landing'   => Landing::class,
+    'Login'     => Login::class,
+    'Logout'    => Logout::class,
+    'Dashboard' => Dashboard::class,
+    'Users'     => Users::class,
 ];
 
-// Obtener controlador (por defecto Landing)
-$controllerName = isset($_GET['c']) ? $_GET['c'] : 'Landing';
-$controllerName = preg_replace('/\W/', '', $controllerName);
+// 2) Obtener controlador (por defecto Landing) y sanear
+$controllerName = $_GET['c'] ?? 'Landing';
+$controllerName = preg_replace('/\W/', '', (string)$controllerName);
 
-// Validar en la whitelist
+// 3) Validar whitelist
 if (!array_key_exists($controllerName, $allowedControllers)) {
     $controllerName = 'Landing';
 }
 
-// Cargar el archivo del controlador
-require_once $allowedControllers[$controllerName];
+// 4) Instanciar controlador por clase
+$controllerClass = $allowedControllers[$controllerName];
+$controller = new $controllerClass();
 
-// IMPORTANTE: construir el nombre de la clase con namespace
-$controllerClass = "App\\Controllers\\{$controllerName}";
-$controller      = new $controllerClass();
+// 5) Acción segura (por defecto main) y sanear
+$action = $_GET['a'] ?? 'main';
+$action = preg_replace('/\W/', '', (string)$action);
 
-// Acción segura (por defecto main)
-$action = isset($_GET['a']) ? $_GET['a'] : 'main';
-$action = preg_replace('/\W/', '', $action);
-
-// VISTAS PÚBLICAS (Landing y Login)
+// 6) Renderizado con control de sesión
 if ($controllerName === 'Landing' || $controllerName === 'Login') {
 
-    require_once "views/company/header.view.php";
+    require __DIR__ . "/views/company/header.view.php";
 
     if (is_callable([$controller, $action])) {
-        call_user_func([$controller, $action]);
+        $controller->{$action}();
     }
 
-    require_once "views/company/footer.view.php";
+    require __DIR__ . "/views/company/footer.view.php";
 
 } elseif (!empty($_SESSION['session'])) {
 
-    // VISTAS POR ROL (cuando ya hay sesión)
-    $profile     = isset($_SESSION['profile']) ? @unserialize($_SESSION['profile']) : null;
-    $sessionRole = $_SESSION['session'];
+    $sessionRole = (string)$_SESSION['session'];
 
-    require_once "views/roles/" . $sessionRole . "/header.view.php";
+    require __DIR__ . "/views/roles/{$sessionRole}/header.view.php";
 
     if (is_callable([$controller, $action])) {
-        call_user_func([$controller, $action]);
+        $controller->{$action}();
     }
 
-    require_once "views/roles/" . $sessionRole . "/footer.view.php";
+    require __DIR__ . "/views/roles/{$sessionRole}/footer.view.php";
 
 } else {
-    // Si intenta entrar a algo privado sin sesión → volver a inicio
     header("Location: ?");
     exit;
 }

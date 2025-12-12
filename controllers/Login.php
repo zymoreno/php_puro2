@@ -1,44 +1,44 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\User;
 
 class Login
 {
-    private const LOGIN_VIEW = "views/company/login.view.php";
-    private const REDIRECT_DASHBOARD = "Location: ?c=Dashboard";
+    private const LOGIN_VIEW = __DIR__ . '/../views/company/login.view.php';
+    private const REDIRECT_DASHBOARD = 'Location: ?c=Dashboard';
 
-    // Método para renderizar vistas
-    private function renderView(string $path): void
+    // Render seguro de vistas (para archivos .view.php)
+    private function renderView(string $absolutePath): void
     {
-        require_once $path;
+        require $absolutePath;
     }
 
     public function main(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
+        if ($method === 'GET') {
             if (empty($_SESSION['session'])) {
                 $this->renderView(self::LOGIN_VIEW);
-            } else {
-                header(self::REDIRECT_DASHBOARD);
-                exit;
+                return;
             }
+
+            header(self::REDIRECT_DASHBOARD);
+            exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+        if ($method === 'POST') {
             $email = $_POST['user_email'] ?? '';
             $pass  = $_POST['user_pass'] ?? '';
 
-            $profile = new User($email, $pass);
-            $profile = $profile->login();
+            $profile = (new User($email, $pass))->login();
 
-            // 1. ¿Encontró usuario?
             if ($profile) {
                 $active = (int) $profile->getUserState();
 
-                // 1.1 Usuario activo
                 if ($active !== 0) {
                     $_SESSION['session'] = $profile->getRolName();
                     $_SESSION['profile'] = serialize($profile);
@@ -47,16 +47,17 @@ class Login
                     exit;
                 }
 
-                // 1.2 Usuario NO activo
-                $_SESSION['message'] = "El Usuario NO está activo";
+                $_SESSION['message'] = 'El Usuario NO está activo';
                 $this->renderView(self::LOGIN_VIEW);
                 return;
             }
 
-            // 2. Credenciales incorrectas o usuario no existe
-            $_SESSION['message'] = "Credenciales incorrectas ó el Usuario NO existe";
+            $_SESSION['message'] = 'Credenciales incorrectas o el Usuario NO existe';
             $this->renderView(self::LOGIN_VIEW);
             return;
         }
+
+        // Método HTTP no soportado
+        http_response_code(405);
     }
 }

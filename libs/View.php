@@ -1,22 +1,28 @@
 <?php
+declare(strict_types=1);
+
+namespace App\Libs;
 
 class View
 {
     public static function render(string $path, array $data = []): void
     {
-        // Convierte las claves del arreglo en variables para la vista
-        extract($data);
+        // Convierte claves en variables para la vista (sin sobrescribir)
+        if (!empty($data)) {
+            extract($data, EXTR_SKIP);
+        }
 
-        // Ruta base de las vistas
+        // Base de vistas
         $basePath = __DIR__ . '/../views/';
 
-        // Asegura que siempre termine en .php
-        $file = $basePath . $path . '.php';
+        // Asegura extensión .php
+        $file = $basePath . ltrim($path, '/') . '.php';
 
-        if (file_exists($file)) {
+        if (is_file($file)) {
             require $file;
-        } else {
-            echo "Vista no encontrada: " . htmlspecialchars($file);
+            return;
         }
+
+        echo "Vista no encontrada: " . htmlspecialchars($file, ENT_QUOTES, 'UTF-8');
     }
 }

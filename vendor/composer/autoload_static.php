@@ -9,19 +9,14 @@ class ComposerStaticInit3ae2260f427d0b0a1cd9eb1a7ed5b1f7
     public static $prefixLengthsPsr4 = array (
         'A' =>
         array (
-            'App\\Models\\' => 11,
-            'App\\Controllers\\' => 16,
+            'App\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'App\\Models\\' =>
+        'App\\' =>
         array (
-            0 => __DIR__ . '/../..' . '/models',
-        ),
-        'App\\Controllers\\' =>
-        array (
-            0 => __DIR__ . '/../..' . '/controllers',
+            0 => __DIR__ . '/../..' . '/',
         ),
     );
 
