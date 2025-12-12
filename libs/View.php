@@ -19,7 +19,7 @@ class View
         $file = $basePath . ltrim($path, '/') . '.php';
 
         if (is_file($file)) {
-            require $file;
+            require_once $file;
             return;
         }
 
