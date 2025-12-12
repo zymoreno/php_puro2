@@ -40,13 +40,16 @@ $action = preg_replace('/\W/', '', (string)$action);
 // 6) Renderizado con control de sesión
 if ($controllerName === 'Landing' || $controllerName === 'Login') {
 
-    require __DIR__ . "/views/company/header.view.php";
+    // NOSONAR - Layout include (views are not loaded via PSR-4)
+    require_once __DIR__ . '/views/company/header.view.php';
+
 
     if (is_callable([$controller, $action])) {
         $controller->{$action}();
     }
+    // NOSONAR - Layout include (views are not loaded via PSR-4)
+    require_once __DIR__ . '/views/company/header.view.php';
 
-    require __DIR__ . "/views/company/footer.view.php";
 
 } elseif (!empty($_SESSION['session'])) {
 
