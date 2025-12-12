@@ -11,16 +11,15 @@ class DataBase{
         $hostname = "serverdatabase2.mysql.database.azure.com";
         $port     = "3306";
 
-        // Nombre exacto de tu base
+
         $database = "database_php";
 
-        // Usuario administrador con el sufijo del servidor
         $username = "Adminda2@serverdatabase2";
 
-        // Contraseña que configuraste o restablezcas en Azure
-        $password = "A4min123.";
 
-        // Certificado SSL obligatorio en Azure
+        $password = getenv('DB_PASSWORD');
+
+
         $options = [
             PDO::MYSQL_ATTR_SSL_CA => 'assets/database/DigiCertGlobalRootG2.crt.pem',
             PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
