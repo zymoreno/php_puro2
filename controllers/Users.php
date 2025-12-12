@@ -28,7 +28,8 @@ class Users
         }
 
         // Ruta absoluta para evitar fallos por ruta relativa
-        require __DIR__ . '/../' . ltrim($relativePath, '/');
+        require_once __DIR__ . '/../' . ltrim($relativePath, '/');
+
     }
 
     // Controlador Principal
