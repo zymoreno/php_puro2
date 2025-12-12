@@ -39,4 +39,4 @@ class DataBase{
         return $pdo;
     }
 }
-?>
+
